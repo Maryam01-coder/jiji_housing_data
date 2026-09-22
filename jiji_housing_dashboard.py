@@ -158,7 +158,7 @@ def charts(filtered_df):
         y=property_count.values,
     )
     fig.update_layout(
-        xaxis_title='House_Type',
+        xaxis_title='House Type',
         yaxis_title='Frequency',
         height=600
     )
