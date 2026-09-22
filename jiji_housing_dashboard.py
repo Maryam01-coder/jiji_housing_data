@@ -111,7 +111,7 @@ def charts(filtered_df):
         st.warning('No Filter Selected. Please Adjust Your Selection.')
         return
 
-    st.subheader('Number of Listings Per Region')
+    st.subheader('Number of Listings Per State')
     region_count = filtered_df["region_parent_name"].value_counts()
     fig1 = px.bar(
         x=region_count.index,
@@ -123,7 +123,7 @@ def charts(filtered_df):
     )
     st.plotly_chart(fig1, width='stretch')
 
-    st.subheader('Average Price Per Region')
+    st.subheader('Average Price Per State')
     avg_price = filtered_df.groupby("region_parent_name")["price"].mean().sort_values(ascending=False)
     fig2 = px.bar(
         x=avg_price.index,
@@ -135,7 +135,7 @@ def charts(filtered_df):
     )
     st.plotly_chart(fig2, width='stretch')
 
-    st.subheader('Distribution of Property Prices  by Average')
+    st.subheader('Distribution of Property Prices by Average')
     property_prices = filtered_df.groupby("house_type")['price'].mean()
     fig3 = px.histogram(
         x=property_prices.index,
@@ -150,6 +150,24 @@ def charts(filtered_df):
     marker_line_width=2
     )
     st.plotly_chart(fig3, width='stretch')
+
+    st.subheader('Distribution of House Types')
+    property_count = filtered_df["house_type"].value_counts()
+    fig = px.histogram(
+        x=property_count.index,
+        y=property_count.values,
+    )
+    fig.update_layout(
+        xaxis_title='House_Type',
+        yaxis_title='Frequency',
+        height=600
+    )
+    fig.update_traces(
+    marker_line_color="white",
+    marker_line_width=2
+    )
+    st.plotly_chart(fig, width='stretch')
+
 
     st.subheader('Price by Number of Bedrooms')
     fig4 = px.box(
