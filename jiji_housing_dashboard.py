@@ -34,7 +34,7 @@ def create_sidebar_filter(df):
         default=df["furnishing"].unique(),
     )
     region = st.sidebar.multiselect(
-        "Select Region",
+        "Select State",
         options=df["region_parent_name"].unique(),
         default=df["region_parent_name"].unique(),
     )
@@ -96,7 +96,7 @@ def display_metrics(filtered_df):
 
     with col3:
         most_common_region = filtered_df["region_parent_name"].value_counts().idxmax() if len(filtered_df) > 0 else 0
-        st.metric("🌃 Most Common Region", f"{most_common_region}")
+        st.metric("🌃 Most Common State", f"{most_common_region}")
 
     with col4:
         most_common_house_type = filtered_df["house_type"].value_counts().idxmax() if len(filtered_df) > 0 else 0
@@ -185,29 +185,28 @@ def charts(filtered_df):
     )
     st.plotly_chart(fig4, width='stretch')
 
-    col1, col2 = st.columns(2)
-    with col1:
-        st.subheader('Property Size vs. Price')
-        fig5 = px.scatter(
-            filtered_df,
-            x="property_size(sqm)",
-            y="price",
-            color="furnishing",
-            labels={
-                "property_size(sqm)": "Property Size",
-                "price": "Price"
-            }
-        )
-        st.plotly_chart(fig5, width='stretch')
+    
+    st.subheader('Property Size vs. Price')
+    fig5 = px.scatter(
+        filtered_df,
+        x="property_size(sqm)",
+        y="price",
+        color="furnishing",
+        labels={
+            "property_size(sqm)": "Property Size",
+            "price": "Price"
+        }
+    )
+    st.plotly_chart(fig5, width='stretch')
 
-    with col2:
-        st.subheader('Furnishing Type Distribution') 
-        furnish_count = filtered_df["furnishing"].value_counts()
-        fig6 = px.pie(
-            values=furnish_count.values,
-            names=furnish_count.index,
-        )
-        st.plotly_chart(fig6, width="stretch")
+
+    st.subheader('Furnishing Type Distribution') 
+    furnish_count = filtered_df["furnishing"].value_counts()
+    fig6 = px.pie(
+        values=furnish_count.values,
+        names=furnish_count.index,
+    )
+    st.plotly_chart(fig6, width="stretch")
 
     st.subheader('Correlation of Numeric Variables') 
     correlation = filtered_df[["property_size(sqm)", "price", "bedrooms", "bathrooms"]].corr()
